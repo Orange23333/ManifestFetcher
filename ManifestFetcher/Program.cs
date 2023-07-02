@@ -28,17 +28,18 @@ namespace ManifestFetcher.Client
 			ManifestFile manifestFile = ManifestFile.LoadFromFile(ManifestFetcher.Constants.ManifestFilePath);
 			ManifestItem[] manifestItems = manifestFile.manifest;
 
-			int i = 0;
+			int i = 1;
 			foreach (ManifestItem manifestItem in manifestItems)
 			{
-				Console.WriteLine($"Fetch manifest[{i}]");
+				Console.WriteLine($"Manifest[{i}]");
 
 				string baseUrl = manifestItem.remote;
-				string digestFileUrl = Path.Combine(baseUrl, ManifestFetcher.Constants.RemoteDigestFile);
+				string digestFileUrl = Path.Combine(baseUrl, ManifestFetcher.Constants.RemoteDigestFile).Replace('\\', '/');
 
 				string baseLocalPath = manifestItem.local;
 				string digestFilePath = Path.Combine(baseLocalPath, ManifestFetcher.Constants.RemoteDigestFile);
 
+				Directory.CreateDirectory(baseLocalPath);
 				Download.Donwload(digestFileUrl, digestFilePath);
 
 #warning 文件操作存在间隙，本地攻击可能。
@@ -46,32 +47,57 @@ namespace ManifestFetcher.Client
 				
 				DirectoryInfo directoryInfo = new DirectoryInfo(baseLocalPath);
 				IDigest digestAlgorithm = Digest.GetDigest(digestFile.algorithm);
+				int j = 1;
 				foreach(string filename in manifestItem.files)
 				{
 					if (digestFile.TryGetValue(filename, out DigestItem digestItem))
 					{
-						string fileUrl = Path.Combine(baseUrl, filename);
+						string fileUrl = Path.Combine(baseUrl, filename).Replace('\\', '/');
 						string filePath = Path.Combine(baseLocalPath, filename);
-						Download.Donwload(fileUrl, filePath);
+
+						bool needDownload = true;
+						if(File.Exists(filePath))
+						{
+							Console.WriteLine($"[{j}] Detected \"{filePath}\" is existed.");
+							string localFileDigest = Digest.GetFileHashHexString(digestAlgorithm, filePath).ToLower();
+							if (String.CompareOrdinal(localFileDigest, digestItem.digest.ToLower()) != 0)
+							{
+								Console.WriteLine($"[{j}] \"{filePath}\" needs update.");
+							}
+							else
+							{
+								Console.WriteLine($"[{j}] \"{filePath}\" is already ok.");
+								needDownload = false;
+							}
+						}
+
+						if(needDownload)
+						{
+							string tempFilePath = Path.GetTempFileName();
+
+							Download.Donwload(fileUrl, tempFilePath);
 
 #warning 文件操作存在间隙，本地攻击可能。
-						string digest = Digest.GetFileHashHexString(digestAlgorithm, filePath).ToLower();
-						if (String.CompareOrdinal(digest, digestItem.digest.ToLower()) != 0)
-						{
-							FileInfo fileInfo = new FileInfo(filePath);
-							fileInfo.Delete();
-							fileInfo = new FileInfo(filePath);
-							Console.WriteLine($"Warning: File digest of \"{filename}\"  isn't correct.");
-						}
-						else
-						{
-							Console.WriteLine($"Downloaded \"{fileUrl}\" -> \"{filePath}\".");
+							string downloadFileDigest = Digest.GetFileHashHexString(digestAlgorithm, tempFilePath).ToLower();
+							if (String.CompareOrdinal(downloadFileDigest, digestItem.digest.ToLower()) != 0)
+							{
+								Console.WriteLine($"[{j}] Warning: Digest of \"{filename}\"  isn't correct.");
+							}
+							else
+							{
+								File.Copy(tempFilePath, filePath, true);
+								Console.WriteLine($"[{j}] Saved \"{fileUrl}\" -> \"{filePath}\".");
+							}
+
+							File.Delete(tempFilePath);
 						}
 					}
 					else
 					{
-						Console.WriteLine($"Warning: Skipped file \"{filename}\", because it isn't has a digest in digest file.");
+						Console.WriteLine($"[{j}] Warning: Skipped file \"{filename}\", because it isn't has a digest in digest file.");
 					}
+
+					j++;
 				}
 
 				i++;
