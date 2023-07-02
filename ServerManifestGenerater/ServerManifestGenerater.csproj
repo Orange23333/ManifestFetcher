@@ -8,6 +8,7 @@
     <Company>Bisitsoft</Company>
     <Copyright>Copyright (c) Orange233 2023</Copyright>
     <RootNamespace>ManifestFetcher.Server</RootNamespace>
+    <PackageProjectUrl>https://github.com/Orange23333/ManifestFetcher</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>

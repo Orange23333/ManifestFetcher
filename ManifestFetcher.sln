@@ -5,9 +5,16 @@ VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManifestFetcher", "ManifestFetcher\ManifestFetcher.csproj", "{E1B63B86-DAE6-426B-A876-3B47826F3604}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerManifestGenerater", "ServerManifestGenerater\ServerManifestGenerater.csproj", "{239DF661-7045-4507-9D01-E0F2EC7F8B95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerManifestGenerater", "ServerManifestGenerater\ServerManifestGenerater.csproj", "{239DF661-7045-4507-9D01-E0F2EC7F8B95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibManifestFetcher", "LibManifestFetcher\LibManifestFetcher.csproj", "{CDA0AF9F-8B6C-4A2F-8CB1-F233083E2A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibManifestFetcher", "LibManifestFetcher\LibManifestFetcher.csproj", "{CDA0AF9F-8B6C-4A2F-8CB1-F233083E2A04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{68BC1388-35E5-4932-A64D-7BA838EBA888}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		Readme.md = Readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
