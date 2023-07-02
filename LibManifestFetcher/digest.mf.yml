@@ -1,0 +1,4 @@
+﻿algorithm: "sha2-256"
+files:
+- file: "mod.zip"
+  digest: "adfsfdsfsdfffffffffffffffffffffff"

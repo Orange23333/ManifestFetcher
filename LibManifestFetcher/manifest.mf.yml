@@ -1,0 +1,9 @@
+﻿settings:
+  security:
+    key_server: "hkps://keyserver.ubuntu.com"
+    key_id: "4f9020f7bea4ec9d49ab93361ad4c389688e9b50"
+manifest:
+- local: ".minecraft/mods/"
+  remote: "https://www.ourorangenet.com/download/caji_server/mods"
+  files:
+  - "industrialcraft-2-2.8.222-ex112.jar"

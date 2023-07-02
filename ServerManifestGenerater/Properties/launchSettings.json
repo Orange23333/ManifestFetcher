@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ServerManifestGenerater": {
+      "commandName": "Project",
+      "commandLineArgs": "\"D:/1.12.2客户端 - 副本/.minecraft/mods\""
+    }
+  }
+}
