@@ -28,6 +28,24 @@ namespace ManifestFetcher.Client
 			ManifestFile manifestFile = ManifestFile.LoadFromFile(ManifestFetcher.Constants.ManifestFilePath);
 			ManifestItem[] manifestItems = manifestFile.manifest;
 
+			if (manifestFile.settings.allow_auto_update)
+			{
+				string manifestFileUrl = manifestFile.settings.auto_update_url;
+				string manifestFilePath = Path.GetTempFileName();
+
+#warning 如果是多清单，这样会比较低效，建议将清单分离出去，用include指令来包含。
+				Download.Donwload(manifestFileUrl, manifestFilePath);
+				ManifestFile downloadManifestFile = ManifestFile.LoadFromFile(manifestFilePath);
+				
+				if(!ManifestItem.Equals(manifestItems, downloadManifestFile.manifest)){
+					manifestItems = manifestFile.manifest=downloadManifestFile.manifest;
+#warning 也可以不保存
+					manifestFile.SaveTo(ManifestFetcher.Constants.ManifestFilePath);
+				}
+
+				File.Delete(manifestFilePath);
+			}
+
 			int i = 1;
 			foreach (ManifestItem manifestItem in manifestItems)
 			{

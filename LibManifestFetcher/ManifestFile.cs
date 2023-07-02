@@ -8,6 +8,7 @@ namespace ManifestFetcher
 {
 	public class ManifestFile
 	{
+		public ManifestSettings settings { get; set; }
 		public ManifestItem[] manifest { get; set; }
 
 		public static ManifestFile LoadFromFile(string path)

@@ -1,4 +1,9 @@
-﻿manifest:
+﻿settings:
+  # WARNING: If server isn't be trusted, don't allow this option.
+  # This optional allow the ManifestFetcher automatically check update of manifest file.
+  allow_auto_update: false
+  auto_update_url: "https://www.ourorangenet.com/download/caji_server/mods/manifest.mf.yml"
+manifest:
 - local: ".minecraft/mods/"
   remote: "https://www.ourorangenet.com/download/caji_server/mods"
   files:
