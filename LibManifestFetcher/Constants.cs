@@ -8,6 +8,5 @@ namespace ManifestFetcher
 		public static readonly string ManifestFilePath = "manifest.mf.yml";
 		public static readonly string RemoteConfigFile = "config.mf.yml";
 		public static readonly string RemoteDigestFile = "digest.mf.yml";
-		public static readonly string RemoteDigestSignatureFile = "digest.mf.yml.sign";
 	}
 }

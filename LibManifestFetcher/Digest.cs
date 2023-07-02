@@ -19,7 +19,7 @@ namespace ManifestFetcher
 		public static readonly IDigest SHA512 = new BCDigests.Sha512Digest();
 		public static readonly IDigest SM3 = new BCDigests.SM3Digest();
 
-		public static readonly Dictionary<string, IDigest> HMACs = new Dictionary<string, IDigest>()
+		public static readonly Dictionary<string, IDigest> Digests = new Dictionary<string, IDigest>()
 		{
 			{ "md5", MD5},
 			{ "sha1", SHA1},
@@ -32,7 +32,7 @@ namespace ManifestFetcher
 
 		public static IDigest GetDigest(string algorithm)
 		{
-			if(HMACs.TryGetValue(algorithm.ToLower(), out var r))
+			if(Digests.TryGetValue(algorithm.ToLower(), out var r))
 			{
 				return r;
 			}

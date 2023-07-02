@@ -1,6 +1,3 @@
-gpg_path: "C:/Program Files/Git/usr/bin/gpg.exe"
-key_id: "4F9020F7BEA4EC9D49AB93361AD4C389688E9B50"
-key_server: "hkps://keyserver.ubuntu.com"
 # `digest_algorithm` allow md5, sha1, sha256 (sha2-256), sha512 (sha2-512) as parameter.
 digest_algorithm: "sha2-256"
 manifest_client_local: ".minecraft/mods/"

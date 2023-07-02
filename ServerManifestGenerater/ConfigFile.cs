@@ -12,9 +12,6 @@ namespace ManifestFetcher.Server
 {
 	public class ConfigFile
 	{
-		public string? gpg_path { get; set; }
-		public string? key_id { get; set; }
-		public string? key_server { get; set; }
 		public string? digest_algorithm { get; set; }
 		public string? manifest_client_local { get; set; }
 		public string? manifest_remote_url { get; set; }

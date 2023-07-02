@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace ManifestFetcher
@@ -9,16 +10,28 @@ namespace ManifestFetcher
 	public class DigestFile
 	{
 		public string algorithm { get; set; }
+#warning 没有检查重复项
 		public DigestItem[] files { get; set; }
 
-		public static bool Verify(string targetDirectory)
+		public bool Contains(string filename)
 		{
-			JetBrains.DownloadPgpVerifier.PgpSignaturesVerifier.Verify()
+			return (from val in files
+					where val.file == filename
+					select val).Any();
 		}
-		
-		private static void Sign(string targetDirectory)
+
+		public bool TryGetValue(string filename, out DigestItem result)
 		{
-			Utility.PGPSignatureTools.PGPSignature.Sign();
+			var q = from val in files
+					where val.file == filename
+					select val;
+			if(q.Any())
+			{
+				result = q.First();
+				return true;
+			}
+			result = null;
+			return false;
 		}
 
 		public static DigestFile LoadFromFile(string path)
@@ -37,12 +50,6 @@ namespace ManifestFetcher
 			serializer.Serialize(sw, this, typeof(DigestFile));
 			sw.Flush();
 			fs.Flush();
-
-			fs.Position = 0;
-			StreamReader sr= new StreamReader(fs);
-			byte[] bytes = Encoding.ASCII.GetBytes(sr.ReadToEnd());
-
-			Utility.PGPSignatureTools.PGPSignature.Sign(bytes, )
 		}
 	}
 }

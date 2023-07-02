@@ -10,8 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="BouncyCastle.Cryptography" Version="2.2.1" />
-    <PackageReference Include="JetBrains.DownloadPgpVerifier" Version="1.0.0" />
-    <PackageReference Include="Orange233.Utility.PGPSignatureTools" Version="1.0.1" />
     <PackageReference Include="YamlDotNet" Version="13.1.1" />
   </ItemGroup>
 

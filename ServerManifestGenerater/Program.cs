@@ -24,8 +24,7 @@ namespace ManifestFetcher.Server
 		{
 			ManifestFetcher.Constants.ManifestFilePath,
 			ManifestFetcher.Constants.RemoteConfigFile,
-			ManifestFetcher.Constants.RemoteDigestFile,
-			ManifestFetcher.Constants.RemoteDigestSignatureFile
+			ManifestFetcher.Constants.RemoteDigestFile
 		};
 
 		public static ConfigFile? ConfigFile = null;
@@ -53,19 +52,11 @@ namespace ManifestFetcher.Server
 
 			ManifestItem manifestItem = new ManifestItem()
 			{
-				local = ConfigFile.manifest_client_local,
-				remote = ConfigFile.manifest_remote_url
+				local = ConfigFile.manifest_client_local ?? throw new NullReferenceException(nameof(ConfigFile.manifest_client_local)),
+				remote = ConfigFile.manifest_remote_url ?? throw new NullReferenceException(nameof(ConfigFile.manifest_remote_url))
 			};
 			ManifestFile manifestFile = new ManifestFile()
 			{
-				settings = new ManifestSettings()
-				{
-					security = new ManifestSettings_Security()
-					{
-						key_id = ConfigFile.key_id,
-						key_server = ConfigFile.key_server
-					}
-				},
 				manifest = new ManifestItem[]
 				{
 					manifestItem
@@ -88,7 +79,7 @@ namespace ManifestFetcher.Server
 		{
 			DigestFile digestFile = new DigestFile()
 			{
-				algorithm = ConfigFile.digest_algorithm
+				algorithm = ConfigFile.digest_algorithm ?? throw new NullReferenceException(nameof(ConfigFile.digest_algorithm))
 			};
 			List<DigestItem> digests = new List<DigestItem>();
 			IDigest digest = Digest.GetDigest(ConfigFile.digest_algorithm);
@@ -109,13 +100,6 @@ namespace ManifestFetcher.Server
 			digestFile.files = digests.ToArray();
 
 			digestFile.SaveTo(Path.Combine(targetDirectory, ManifestFetcher.Constants.RemoteDigestFile));
-
-			Process process = Process.Start(
-				ConfigFile.gpg_path,
-				$"--armor --local-user {ConfigFile.key_id} --detach-sign --output '{Path.Combine(targetDirectory, ManifestFetcher.Constants.RemoteDigestSignatureFile)}' '{Path.Combine(targetDirectory, ManifestFetcher.Constants.RemoteDigestFile)}'"
-			);
-
-			process.WaitForExit();
 		}
 	}
 }
