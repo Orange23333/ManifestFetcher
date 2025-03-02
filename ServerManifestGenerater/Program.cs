@@ -44,7 +44,8 @@ namespace ManifestFetcher.Server
 			GenerateManifest(targetDirectory, files);
 			GenerateDigest(targetDirectory, files);
 
-			Console.WriteLine("Finished!");
+			Console.WriteLine("Finished! (Press any key to exit)");
+			Console.ReadKey();
 		}
 
 		public static void GenerateManifest(string targetDirectory, FileInfo[] fileInfos)

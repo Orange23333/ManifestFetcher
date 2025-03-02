@@ -10,6 +10,7 @@ using BCDigests = Org.BouncyCastle.Crypto.Digests;
 using IDigest = Org.BouncyCastle.Crypto.IDigest;
 
 using ManifestFetcher.Client;
+using System.Threading;
 
 namespace ManifestFetcher.Client
 {
@@ -18,11 +19,9 @@ namespace ManifestFetcher.Client
 	{
 		static void Main(string[] args)
 		{
-			//先检测manifest中文是否更新
-			//再检测manifest中是否有digest中没有的文件。
-			//提示新manifest中已经删除的文件，记录到manifest.deleted中。
+#warning提示新manifest中已经删除的文件，记录到manifest.deleted中。
 
-			Console.WriteLine("注意使用本软件在更新文件时，默认会覆盖源文件内容，请谨慎操作！（按任意键继续）");
+			Console.WriteLine("注意使用本软件在更新文件时，默认会覆盖原有文件内容，请谨慎操作！（按任意键继续）");
 			Console.ReadKey();
 
 			ManifestFile manifestFile = ManifestFile.LoadFromFile(ManifestFetcher.Constants.ManifestFilePath);
@@ -30,6 +29,8 @@ namespace ManifestFetcher.Client
 
 			if (manifestFile.settings.allow_auto_update)
 			{
+				Console.WriteLine("Updating manifest...");
+
 				string manifestFileUrl = manifestFile.settings.auto_update_url;
 				string manifestFilePath = Path.GetTempFileName();
 
@@ -41,6 +42,12 @@ namespace ManifestFetcher.Client
 					manifestItems = manifestFile.manifest=downloadManifestFile.manifest;
 #warning 也可以不保存
 					manifestFile.SaveTo(ManifestFetcher.Constants.ManifestFilePath);
+
+					Console.WriteLine("Updated.");
+				}
+				else
+				{
+					Console.WriteLine("Everything updated.");
 				}
 
 				File.Delete(manifestFilePath);
@@ -120,6 +127,9 @@ namespace ManifestFetcher.Client
 
 				i++;
 			}
+
+			Console.WriteLine("结束！（按下任意键退出）");
+			Console.ReadKey();
 		}
 	}
 }

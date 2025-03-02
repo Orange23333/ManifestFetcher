@@ -1,6 +1,6 @@
 # ManifestFetcher
 
-A software to fetch file list in manifest.
+A software to fetch file listed in manifest.
 一个根据清单获取文件的软件。
 
 ---
